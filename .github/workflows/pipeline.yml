@@ -30,7 +30,9 @@ jobs:
       run: |
         echo "Configurando chave SSH"
         echo "$SSH_KEY" > private_key && chmod 600 private_key
-        ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-44-221-238-137.compute-1.amazonaws.com << 'EOF'
+        eval "$(ssh-agent -s)"
+        ssh-add private_key
+        ssh -o StrictHostKeyChecking=no ubuntu@ec2-44-221-238-137.compute-1.amazonaws.com << 'EOF'
           cd POC/
           git pull
           ./start.sh
